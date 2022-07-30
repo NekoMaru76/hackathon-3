@@ -15,6 +15,7 @@
     "utils/": "./utils/",
     "poly-decomp": "https://esm.sh/poly-decomp@0.3.0",
     "mods/": "./mods/",
-    "static/": "./static/"
+    "static/": "./static/",
+    "cuid": "https://esm.sh/cuid@2.1.8"
   }
 }

@@ -5,7 +5,7 @@ import {
     Player
 } from "./entity.ts";
 import Line from "mods/matter-lines/js/line.js";
-import { width, height } from "static/data.ts";
+import { width, height, gen } from "static/data.ts";
 import { Message } from "static/data.ts";
 
 type Body = Matter.Body;
@@ -62,7 +62,7 @@ export class Room {
             y: Math.floor(Math.random() * (height-10)) - height/2+10
         };
     }
-    constructor(public id = crypto.randomUUID()) {
+    constructor(public id = gen()) {
         const {
             entities,
             engine,
@@ -99,30 +99,36 @@ export class Room {
         }) => {
             for (const pair of pairs) {
                 let a: Body;
-                let b: Body;
+                let bId: string[];
 
                 const isABullet = pair.bodyA.label.startsWith("Bullet");
                 const isBBullet = pair.bodyB.label.startsWith("Bullet");
 
                 if (isABullet) {
-                    Composite.remove(engine.world, pair.bodyA);
+                    bId = pair.bodyA.label.replace("Bullet-", "").split("-");
+
+
+                    console.log(entities, bId)
+                    this.rmEntity(entities[bId[1]]);
 
                     if (pair.bodyB.label.startsWith("Player")) {
                         a = pair.bodyB;
-                        b = pair.bodyA;
                     } else continue;
                 } else if (isBBullet) {
-                    Composite.remove(engine.world, pair.bodyB);
+                    bId = pair.bodyB.label.replace("Bullet-", "").split("-");
+
+                    console.log(entities, bId)
+
+                    this.rmEntity(entities[bId[1]]);
 
                     if (pair.bodyA.label.startsWith("Player")) {
                         a = pair.bodyA;
-                        b = pair.bodyB;
                     } else continue;
                 }
                 else continue;
 
                 const id = a.label.replace("Player-", "");
-                const by = (<Player>entities[b.label.replace("Bullet-", "")]).name;
+                const by = (<Player>entities[bId[0]]).name;
                 const entity = entities[id] as Player;
                 const { name, body } = entity;
 
@@ -220,7 +226,7 @@ export class Room {
         });
     }
     sendData(data: {
-        entities: Record<string, Entity>,
+        entities: Record<string, ReturnType<Entity["toJSON"]>>,
         wall: Vector[]
     }) {
         this.send({

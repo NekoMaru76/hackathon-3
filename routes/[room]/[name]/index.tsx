@@ -5,6 +5,7 @@ import { Room } from "game/room";
 import { PageProps, Handlers } from "$fresh/server.ts";
 import Display from "islands/Display.tsx";
 import { Player } from "game/entity";
+import { gen } from "static/data.ts";
 
 export const handler: Handlers<{
     room: Room,
@@ -38,7 +39,7 @@ export const handler: Handlers<{
                 socket: ws, 
                 response 
             } = Deno.upgradeWebSocket(req);
-            const id = crypto.randomUUID();
+            const id = gen();
             const entity = new Player(id, name, Room.getRandVec());
 
             ws.onopen = () => {

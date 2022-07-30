@@ -1,6 +1,7 @@
 import Matter, {
     Vector
 } from "matter-js";
+import { gen } from "static/data.ts";
 
 type Body = Matter.Body;
 
@@ -54,15 +55,17 @@ export class Player extends Entity {
 
 export class Bullet extends Entity {
     type = EntityType.Bullet;
-    id = crypto.randomUUID();
+    id: string;
 
     constructor(public first: Vector, public rad: number, by: string) {
+        const id = gen();
         const body = Bodies.circle(first.x, first.y, 0.5, {
-            label: "Bullet-" + by,
+            label: "Bullet-" + by + "-" + id,
             frictionAir: 0
         });
 
         super(body);
         
+        this.id = id;
     }
 }

@@ -1,5 +1,9 @@
+import cuid from "cuid";
+
 export const width = 100;
 export const height = 100;
+export const alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+export const gen = cuid;
 
 export interface BaseMessage<Type extends string = string> {
     type: Type,

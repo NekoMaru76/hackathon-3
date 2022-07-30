@@ -1,10 +1,6 @@
 import { HandlerContext } from "$fresh/server.ts";
 import { Room } from "game/room";
-
-const alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-const gen = () => "XXXXXXXXXXXX".replaceAll("X", () => {
-    return alphabets[Math.floor(Math.random() * alphabets.length)];
-});
+import { gen } from "static/data.ts";
 
 export const handler = (req: Request, ctx: HandlerContext<void, Record<string, Room>>) => {
     const keys = Object.keys(ctx.state);
